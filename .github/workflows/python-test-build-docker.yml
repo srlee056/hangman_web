@@ -37,3 +37,12 @@ jobs:
     - name: Test with unittest
       run: |
         python3 -m unittest discover -p 'test*.py' # python3 test.py
+    - name: Login to the Docker Hub
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}} 
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD  
+    - name: Build the Docker image
+      run: docker build --tag ${{secrets.DOCKER_USER}}/hangman-web:latest .
+    - name : Push the Docker image to the Docker Hub
+      run: docker push ${{secrets.DOCKER_USER}}/hangman-web:latest
